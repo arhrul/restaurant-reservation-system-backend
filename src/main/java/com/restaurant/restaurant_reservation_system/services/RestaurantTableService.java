@@ -41,6 +41,7 @@ public class RestaurantTableService {
                     tr.setPrivate(t.isPrivate());
                     tr.setAccessible(t.isAccessible());
                     tr.setAdvised(this.checkAdvised(t, filters));
+                    tr.setAvailable(this.checkAvailability(t, filters));
                     return tr;
                 })
                 .toList();
@@ -74,7 +75,6 @@ public class RestaurantTableService {
     }
 
     private boolean matchesPreferences(RestaurantTable table, List<Preference> preferences) {
-
         if (preferences == null || preferences.isEmpty()) {
             return true;
         }
@@ -97,6 +97,11 @@ public class RestaurantTableService {
     }
 
     private boolean checkAvailability(RestaurantTable table, TableFiltersRequest filters) {
+        int guests = filters.getNumberOfGuests();
+
+        if (table.getCapacity() < guests) {
+            return false;
+        }
 
         List<Reservation> reservations = reservationRepository.findAllByTable(table);
 

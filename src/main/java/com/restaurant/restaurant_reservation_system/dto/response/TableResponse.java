@@ -29,4 +29,7 @@ public class TableResponse {
 
     @NotNull
     private boolean isAdvised;
+
+    @NotNull
+    private boolean isAvailable;
 }
